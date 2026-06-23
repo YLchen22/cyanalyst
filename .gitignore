@@ -1,0 +1,41 @@
+# Dependencies
+.venv/
+node_modules/
+
+# Build output
+site/docs/.vitepress/cache/
+site/docs/.vitepress/dist/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data files (large raw data)
+data/raw/
+data/cache/
+
+# Environment
+.env
+.env.local
+
+# CodeBuddy workspace
+.codebuddy/
+.workbuddy/
+
+# Temporary
+*.tmp
+*.log
