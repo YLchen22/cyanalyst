@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ResearchCard from '../components/ResearchCard.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+// Fetch latest reports from all collections
+const [daily, weekly, special] = await Promise.all([
+  getCollection('daily'),
+  getCollection('weekly'),
+  getCollection('special'),
+]);
+
+const allReports = [
+  ...daily.map(e => ({ ...e.data, collection: 'daily', id: e.id })),
+  ...weekly.map(e => ({ ...e.data, collection: 'weekly', id: e.id })),
+  ...special.map(e => ({ ...e.data, collection: 'special', id: e.id })),
+].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 6);
+
+const categories = [
+  { key: 'daily', label: '日报', desc: '每日早盘 / 午盘速览', badge: 'bg-blue-100 text-blue-700' },
+  { key: 'weekly', label: '周报', desc: '每周市场回顾与展望', badge: 'bg-purple-100 text-purple-700' },
+  { key: 'special', label: '专题', desc: '深度行业与主题研究', badge: 'bg-amber-100 text-amber-700' },
+];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="text-center py-12 sm:py-16">
+    <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
+      <span class="text-blue-600">Cy</span><span>Analyst</span>
+    </h1>
+    <p class="mt-4 text-lg text-slate-500 max-w-xl mx-auto">
+      AI 驱动的智能投研平台 · 每日精进
+    </p>
+    <div class="mt-6 flex items-center justify-center gap-3">
+      <a href={`${base}research/`} class="px-5 py-2.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors">
+        浏览研报
+      </a>
+      <a href={`${base}about/`} class="px-5 py-2.5 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">
+        了解更多
+      </a>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+    {categories.map(cat => (
+      <a href={`${base}research/${cat.key}/`} class="block bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md hover:border-slate-300 transition-all">
+        <div class={`inline-block px-2 py-0.5 rounded-full text-xs font-medium mb-2 ${cat.badge}`}>
+          {cat.label}
+        </div>
+        <p class="text-sm text-slate-500">{cat.desc}</p>
+      </a>
+    ))}
+  </section>
+
+  <!-- Latest reports -->
+  <section>
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-semibold text-slate-900">最新研报</h2>
+      <a href={`${base}research/`} class="text-sm text-blue-600 hover:text-blue-800">全部 →</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {allReports.map(report => (
+        <ResearchCard
+          title={report.title}
+          date={report.date}
+          category={report.collection}
+          tags={report.tags}
+          summary={report.summary}
+          url={`${base}research/${report.collection}/${report.id}/`}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

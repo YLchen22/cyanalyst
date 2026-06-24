@@ -1,0 +1,19 @@
+{
+  "name": "cyanalyst",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev --port 5173",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview --port 4321",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "pagefind": "^1.3.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ResearchCard from '../../../components/ResearchCard.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const entries = await getCollection('daily');
+const reports = entries
+  .map(e => ({ ...e.data, id: e.id }))
+  .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const categories = [
+  { key: 'daily', label: '日报', count: 0 },
+  { key: 'weekly', label: '周报', count: 0 },
+  { key: 'special', label: '专题', count: 0 },
+];
+---
+
+<BaseLayout title="日报 · CyAnalyst">
+  <h1 class="text-2xl font-bold text-slate-900 mb-2">日报</h1>
+  <p class="text-slate-500 mb-6">每日早盘 / 午盘速览</p>
+
+  <div class="flex items-center gap-2 mb-6">
+    <a href={`${base}research/`} class="px-3 py-1 text-sm bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors">全部</a>
+    <a href={`${base}research/daily/`} class="px-3 py-1 text-sm bg-slate-900 text-white rounded-full">日报</a>
+    <a href={`${base}research/weekly/`} class="px-3 py-1 text-sm bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors">周报</a>
+    <a href={`${base}research/special/`} class="px-3 py-1 text-sm bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition-colors">专题</a>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {reports.map(report => (
+      <ResearchCard
+        title={report.title}
+        date={report.date}
+        category="daily"
+        tags={report.tags}
+        summary={report.summary}
+        url={`${base}research/daily/${report.id}/`}
+      />
+    ))}
+  </div>
+</BaseLayout>

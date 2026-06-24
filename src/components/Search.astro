@@ -1,0 +1,45 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<div id="search" class="my-6">
+  <div id="search-element" data-pagefind-ui></div>
+</div>
+
+<link href={`${base}pagefind/pagefind-ui.css`} rel="stylesheet" />
+<script is:inline>
+  function initSearch() {
+    var el = document.getElementById('search-element');
+    if (!el) return;
+
+    // Dynamically load pagefind UI only if the assets exist (i.e., after build)
+    var script = document.createElement('script');
+    script.src = (window.__BASE_URL__ || '/') + 'pagefind/pagefind-ui.js';
+    script.type = 'module';
+    script.onload = function() {
+      new PagefindUI({
+        element: '#search-element',
+        showSubResults: true,
+        showImages: false,
+        pageSize: 8,
+        translations: {
+          placeholder: '搜索研报…',
+          zero_results: '没有找到相关研报',
+          many_results: '找到 [count] 篇相关研报',
+          one_result: '找到 1 篇相关研报',
+          searching: '搜索中…',
+        },
+      });
+    };
+    script.onerror = function() {
+      el.innerHTML = '<p class="text-sm text-slate-400 py-2">搜索功能在构建后可用</p>';
+    };
+    document.head.appendChild(script);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSearch);
+  } else {
+    initSearch();
+  }
+</script>
