@@ -1,6 +1,7 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { r2Url } from '../../../config';
 
 const base = import.meta.env.BASE_URL;
 
@@ -13,14 +14,12 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
 
 const dateStr = entry.data.date.toLocaleDateString('zh-CN', {
   year: 'numeric', month: '2-digit', day: '2-digit'
 });
 
-// R2 download URL pattern (placeholder until R2 is configured)
-const r2Url = `https://r2.cyanalyst.com/daily/${entry.id}.docx`;
+const reportUrl = r2Url('daily', entry.id);
 ---
 
 <BaseLayout title={`${entry.data.title} · CyAnalyst`}>
@@ -49,19 +48,16 @@ const r2Url = `https://r2.cyanalyst.com/daily/${entry.id}.docx`;
       )}
     </div>
 
-    <!-- Content -->
-    <div class="prose-cyanalyst">
-      <Content />
-    </div>
-
-    <!-- Download -->
-    <div class="mt-8 pt-6 border-t border-slate-200">
-      <a href={r2Url} class="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    <!-- R2 Action Button -->
+    <div class="mt-8">
+      <a href={reportUrl} target="_blank" rel="noopener"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        下载完整研报 (.docx)
+        阅读完整研报
       </a>
+      <p class="mt-2 text-sm text-slate-400">点击在新标签页中打开 HTML 研报</p>
     </div>
   </article>
 </BaseLayout>

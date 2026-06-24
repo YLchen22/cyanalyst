@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ResearchCard from '../../components/ResearchCard.astro';
 import Search from '../../components/Search.astro';
 import { getCollection } from 'astro:content';
+import { r2Url } from '../../config';
 
 const base = import.meta.env.BASE_URL;
 
@@ -51,7 +52,8 @@ const categories = [
         category={report.collection}
         tags={report.tags}
         summary={report.summary}
-        url={`${base}research/${report.collection}/${report.id}/`}
+        url={r2Url(report.collection, report.id)}
+        external={true}
       />
     ))}
   </div>
