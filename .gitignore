@@ -1,41 +1,39 @@
 # Dependencies
-.venv/
 node_modules/
 
 # Build output
-site/docs/.vitepress/cache/
-site/docs/.vitepress/dist/
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
 dist/
-build/
+.astro/
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Data files (large raw data)
-data/raw/
-data/cache/
+# Logs
+*.log
+npm-debug.log*
 
 # Environment
 .env
 .env.local
 
-# CodeBuddy workspace
-.codebuddy/
-.workbuddy/
+# OS
+.DS_Store
+Thumbs.db
 
-# Temporary
-*.tmp
-*.log
+# Editor
+.vscode/
+.idea/
+
+# Research report binaries (stored on Cloudflare R2, not in Git)
+*.docx
+*.pdf
+
+# Python virtual env
+.venv/
+
+# Script output (temporary, uploaded to R2)
+scripts/output/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Project workspace data (personal)
+.workbuddy/
